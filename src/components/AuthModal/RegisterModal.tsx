@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { handleInputChange, handleRegister } from './utils';
 import { useModal } from '../../contexts/modalContext';
 import {
@@ -15,12 +15,28 @@ import InputField from '../InputField';
 import CrossIcon from '../../assets/cross.svg';
 import Button from '../Button';
 
-const RegisterModal = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  email: string;
+  username: string;
+  password: string;
+}
+
+const RegisterModal: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     email: '',
+    username: '',
     password: '',
   });
   const { openModal, closeModal } = useModal();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    handleRegister(e, formData);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    handleInputChange(e, setFormData);
+  };
+
   return (
     <div className="fixed inset-0 bg-black-1400 bg-opacity-50 flex items-center justify-center">
       <div className="bg-black-1200 p-8 rounded-lg w-full md:w-1/3 relative border-2 border-black-1100">
@@ -28,7 +44,7 @@ const RegisterModal = () => {
           onClick={closeModal}
           className="absolute top-4 right-4 text-white-1100 hover:text-white bg-black-1500 w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 text-xl"
         >
-          <img src={CrossIcon} />
+          <img src={CrossIcon} alt="Close" />
         </button>
         <div className="text-center">
           <h2 className="text-white-1400  mb-2">{SIGNUP_TEXT}</h2>
@@ -36,26 +52,22 @@ const RegisterModal = () => {
             {CREATE_ACCOUNT_TEXT}
           </h1>
         </div>
-        <form
-          onSubmit={(e) => handleRegister(e, formData)}
-          className="space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             name="email"
             type="text"
             label={EMAIL_LABEL_R_TEXT}
             value={formData.email}
             inputPlaceholder="Enter your email"
-            onChange={(e) => handleInputChange(e, setFormData)}
+            onChange={handleChange}
           />
-
           <InputField
             name="username"
             type="text"
             label={USERNAME_TEXT}
             value={formData.username}
             inputPlaceholder="Choose a preferred username"
-            onChange={(e) => handleInputChange(e, setFormData)}
+            onChange={handleChange}
           />
           <InputField
             name="password"
@@ -63,7 +75,7 @@ const RegisterModal = () => {
             label={PASSWORD_TEXT}
             value={formData.password}
             inputPlaceholder="Enter your password"
-            onChange={(e) => handleInputChange(e, setFormData)}
+            onChange={handleChange}
           />
           <Button type="submit" label={CONTINUE_TEXT} />
         </form>

@@ -1,8 +1,13 @@
+import React from 'react';
 import { CREATE_POST_TEXT, POST_TEXT } from './constants';
 import { useModal } from '../../contexts/modalContext';
 
-const CreatePost = () => {
+const CreatePost: React.FC = () => {
   const { openModal } = useModal();
+
+  const handlePostClick = (): void => {
+    openModal('register');
+  };
 
   return (
     <div className="bg-black-1200 p-4 rounded-lg mb-6 border-black-1100 border-2">
@@ -21,7 +26,7 @@ const CreatePost = () => {
         <div className="flex justify-end">
           <button
             className="bg-blue-1100 px-12 py-2 rounded-md text-white-1300"
-            onClick={() => openModal('register')}
+            onClick={handlePostClick}
           >
             {POST_TEXT}
           </button>

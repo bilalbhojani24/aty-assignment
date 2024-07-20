@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useModal } from '../../contexts/modalContext';
 import RegisterModal from './RegisterModal';
 import LoginModal from './LoginModal';
 
-const AuthModals = () => {
+const AuthModals: React.FC = () => {
   const { isModalOpen, modalType } = useModal();
 
-  const renderModal = () => {
+  const renderModal = (): JSX.Element | null => {
     if (!isModalOpen) return null;
     return modalType === 'register' ? <RegisterModal /> : <LoginModal />;
   };

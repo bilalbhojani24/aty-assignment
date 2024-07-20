@@ -1,9 +1,28 @@
+import React from 'react';
 import CreatePost from '../CreatePost';
 import Postcard from '../Postcard';
 import PostsData from '../../api/posts';
 import { GREETING_TEXT, USERNAME_TEXT } from './constants';
 
-const CommunityPage = () => {
+interface CommentObj {
+  name: string;
+  content: string;
+  time: string;
+  likes: number;
+  replyComment: Array<any>;
+}
+
+interface Post {
+  id: string | number;
+  name: string;
+  time: string;
+  content: string;
+  comments: Array<CommentObj>;
+  emoji: string;
+  image: string;
+}
+
+const CommunityPage: React.FC = () => {
   return (
     <div className="bg-gray-900 text-white-1200 min-h-screen">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:max-w-3xl xl:max-w-4xl">
@@ -14,7 +33,7 @@ const CommunityPage = () => {
           <p className="text-white-1200 mb-6">{GREETING_TEXT}</p>
           <CreatePost />
           <div className="space-y-4">
-            {PostsData.map((post) => (
+            {PostsData.map((post: Post) => (
               <Postcard
                 key={post.id}
                 name={post.name}

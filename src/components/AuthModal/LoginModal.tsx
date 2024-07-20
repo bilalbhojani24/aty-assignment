@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { handleInputChange, handleLogin } from './utils';
 import { useModal } from '../../contexts/modalContext';
 import {
@@ -14,12 +14,25 @@ import {
 import InputField from '../InputField';
 import Button from '../Button';
 
-const LoginModal = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  email: string;
+  password: string;
+}
+
+const LoginModal: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
   });
   const { openModal } = useModal();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    handleLogin(e, formData);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    handleInputChange(e, setFormData);
+  };
 
   return (
     <div className="fixed inset-0 bg-black-1400 bg-opacity-50 flex items-center justify-center">
@@ -30,14 +43,14 @@ const LoginModal = () => {
             {LOGIN_ACCOUNT_TEXT}
           </h1>
         </div>
-        <form onSubmit={(e) => handleLogin(e, formData)} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             name="email"
             type="text"
             label={EMAIL_LABEL_TEXT}
             value={formData.email}
             inputPlaceholder="Enter your email or username"
-            onChange={(e) => handleInputChange(e, setFormData)}
+            onChange={handleChange}
           />
           <InputField
             name="password"
@@ -45,7 +58,7 @@ const LoginModal = () => {
             label={PASSWORD_TEXT}
             value={formData.password}
             inputPlaceholder="Enter your password"
-            onChange={(e) => handleInputChange(e, setFormData)}
+            onChange={handleChange}
             labelInline={
               <a href="#" className="text-gray-400 text-sm">
                 {FORGOT_PASSWORD_TEXT}
